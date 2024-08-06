@@ -1,31 +1,42 @@
 #!/usr/bin/python3
-"""Retrieves the list of all Amenity objects:
+""" Flask routes for `Amenity` object related URI subpaths using the
+`app_views` Blueprint.
 """
-
-from flask import abort, request, jsonify
-from models import storage
 from api.v1.views import app_views
+from flask import Flask, jsonify, abort, request
+from models import storage
 from models.amenity import Amenity
-from datetime import datetime
-from models.engine.db_storage import classes
 
 
-@app_views.route("/amenities/", methods=['GET'],
+@app_views.route("/amenities", methods=['GET'],
                  strict_slashes=False)
-def get_aminities():
-    """Retrieves aall Aminity objects"""
-    all_amenities = []
-    amenities_obj = storage.all(Amenity).values()
-    for obj in amenities_obj:
-        all_amenities.append(obj.to_dict())
-    return jsonify(all_amenities)
+def GET_all_Amenity():
+    """ Returns JSON list of all `Amenity` instances in storage
+
+    Return:
+        JSON list of all `Amenity` instances
+    """
+    amenity_list = []
+    for amenity in storage.all(Amenity).values():
+        amenity_list.append(amenity.to_dict())
+
+    return jsonify(amenity_list)
 
 
 @app_views.route("/amenities/<amenity_id>", methods=['GET'],
                  strict_slashes=False)
-def get_amenity(amenity_id):
-    """Retrieves a spcific amenity"""
+def GET_Amenity(amenity_id):
+    """ Returns `Amenity` instance in storage by id in URI subpath
+
+    Args:
+        amenity_id: uuid of `Amenity` instance in storage
+
+    Return:
+        `Amenity` instance with corresponding uuid, or 404 response
+    on error
+    """
     amenity = storage.get(Amenity, amenity_id)
+
     if amenity:
         return jsonify(amenity.to_dict())
     else:
@@ -34,9 +45,18 @@ def get_amenity(amenity_id):
 
 @app_views.route("/amenities/<amenity_id>", methods=['DELETE'],
                  strict_slashes=False)
-def del_amenity(amenity_id):
-    """Delete an amenity"""
+def DELETE_Amenity(amenity_id):
+    """ Deletes `Amenity` instance in storage by id in URI subpath
+
+    Args:
+        amenity_id: uuid of `Amenity` instance in storage
+
+    Return:
+        Empty dictionary and response status 200, or 404 response
+    on error
+    """
     amenity = storage.get(Amenity, amenity_id)
+
     if amenity:
         storage.delete(amenity)
         storage.save()
@@ -45,36 +65,48 @@ def del_amenity(amenity_id):
         abort(404)
 
 
-@app_views.route('/amenities/',strict_slashes=False,
-                 methods=['POST'])
-def create_amenity():
-    '''Creates an Amenity'''
-    if not request.get_json():
-        abort(400, 'Not a JSON')
-    if 'name' not in request.get_json():
-        abort(400, 'Missing name')
-    amenities = []
-    new_amenity = Amenity(name=request.json['name'])
-    storage.new(new_amenity)
-    storage.save()
-    amenities.append(new_amenity.to_dict())
-    return jsonify(amenities[0]), 201
+@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
+def POST_Amenity():
+    """ Creates new `Amenity` instance in storage
+
+    Return:
+        Empty dictionary and response status 200, or 404 response
+    on error
+    """
+    req_dict = request.get_json()
+    if not req_dict:
+        return (jsonify({'error': 'Not a JSON'}), 400)
+    elif 'name' not in req_dict:
+        return (jsonify({'error': 'Missing name'}), 400)
+    new_Amenity = Amenity(**req_dict)
+    new_Amenity.save()
+
+    return (jsonify(new_Amenity.to_dict()), 201)
 
 
-@app_views.route('/amenities/<amenity_id>',strict_slashes=False,
-                 methods=['PUT'])
-def updates_amenity(amenity_id):
-    '''Updates an Amenity object'''
-    all_amenities = storage.all("Amenity").values()
-    amenity = [obj.to_dict() for obj in all_amenities
-               if obj.id == amenity_id]
-    if amenity == []:
+@app_views.route("/amenities/<amenity_id>", methods=['PUT'],
+                 strict_slashes=False)
+def PUT_Amenity(amenity_id):
+    """ Updates `Amenity` instance in storage by id in URI subpath, with
+    kwargs from HTTP body request JSON dict
+
+    Args:
+        amenity_id: uuid of `Amenity` instance in storage
+
+    Return:
+        Empty dictionary and response status 200, or 404 response
+    on error
+    """
+    amenity = storage.get(Amenity, amenity_id)
+    req_dict = request.get_json()
+
+    if amenity:
+        if not req_dict:
+            return (jsonify({'error': 'Not a JSON'}), 400)
+        for key, value in req_dict.items():
+            if key not in ['id', 'created_at', 'updated_at']:
+                setattr(amenity, key, value)
+        storage.save()
+        return (jsonify(amenity.to_dict()))
+    else:
         abort(404)
-    if not request.get_json():
-        abort(400, 'Not a JSON')
-    amenity[0]['name'] = request.json['name']
-    for obj in all_amenities:
-        if obj.id == amenity_id:
-            obj.name = request.json['name']
-    storage.save()
-    return jsonify(amenity[0]), 200
