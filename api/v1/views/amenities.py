@@ -8,7 +8,7 @@ from models import storage
 from models.amenity import Amenity
 
 
-@app_views.route("/amenities", methods=['GET'],
+@app_views.route("/api/v1/amenities", methods=['GET'],
                  strict_slashes=False)
 def GET_all_Amenity():
     """ Returns JSON list of all `Amenity` instances in storage
@@ -23,7 +23,7 @@ def GET_all_Amenity():
     return jsonify(amenity_list)
 
 
-@app_views.route("/amenities/<amenity_id>", methods=['GET'],
+@app_views.route("/api/v1/amenities/<amenity_id>", methods=['GET'],
                  strict_slashes=False)
 def GET_Amenity(amenity_id):
     """ Returns `Amenity` instance in storage by id in URI subpath
@@ -43,7 +43,7 @@ def GET_Amenity(amenity_id):
         abort(404)
 
 
-@app_views.route("/amenities/<amenity_id>", methods=['DELETE'],
+@app_views.route("/api/v1/amenities/<amenity_id>", methods=['DELETE'],
                  strict_slashes=False)
 def DELETE_Amenity(amenity_id):
     """ Deletes `Amenity` instance in storage by id in URI subpath
@@ -84,7 +84,7 @@ def POST_Amenity():
     return (jsonify(new_Amenity.to_dict()), 201)
 
 
-@app_views.route("/amenities/<amenity_id>", methods=['PUT'],
+@app_views.route("/api/v1/amenities/<amenity_id>", methods=['PUT'],
                  strict_slashes=False)
 def PUT_Amenity(amenity_id):
     """ Updates `Amenity` instance in storage by id in URI subpath, with
