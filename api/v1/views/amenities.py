@@ -10,7 +10,7 @@ from datetime import datetime
 from models.engine.db_storage import classes
 
 
-@app_views.route("/amenities/", 
+@app_views.route("/amenities/",
                  strict_slashes=False, methods=["GET"])
 def get_aminities():
     """Retrieves aall Aminity objects"""
@@ -59,7 +59,7 @@ def updates_amenity(amenity_id):
     '''Updates an Amenity object'''
     all_amenities = storage.all("Amenity").values()
     amenity = [obj.to_dict() for obj in all_amenities
-            if obj.id == amenity_id]
+               if obj.id == amenity_id]
     if amenity == []:
         abort(404)
     if not request.get_json():
@@ -70,4 +70,3 @@ def updates_amenity(amenity_id):
             obj.name = request.json['name']
     storage.save()
     return jsonify(amenity[0]), 200
-
