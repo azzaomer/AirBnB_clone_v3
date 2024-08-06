@@ -16,6 +16,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 app.register_blueprint(app_views)
 
+
 @app.teardown_appcontext
 def teardown(self):
     """Closes the DB connection"""
@@ -31,3 +32,4 @@ if __name__ == "__main__":
     api_host = getenv("HBNB_API_HOST", "0.0.0.0")
     api_port = getenv("HBNB_API_PORT", 5000)
     app.run(host=api_host, port=api_port, threaded=True)
+
