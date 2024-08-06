@@ -13,8 +13,8 @@ Routes:
 from api.v1.views import app_views
 from flask import Response, jsonify
 
+
 @app_views.route('/status')
 def return_status():
     """Returns the status of the API"""
     return jsonify({"status": "OK"})
-
