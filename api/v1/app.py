@@ -7,7 +7,6 @@ a specified host and port, which can be customized
 using environment variables.
 """
 
-from api.v1.views import app_views
 from flask import Blueprint, Flask, jsonify
 from models import storage
 from os import getenv
@@ -15,6 +14,7 @@ import sys
 
 
 app = Flask(__name__)
+from api.v1.views import app_views
 app.register_blueprint(app_views)
 
 api_host = getenv("HBNB_API_HOST", "0.0.0.0")
