@@ -8,7 +8,6 @@ using environment variables.
 """
 
 from flask import Blueprint, Flask, jsonify
-from models import storage
 from os import getenv
 import sys
 
@@ -24,6 +23,7 @@ api_port = getenv("HBNB_API_PORT", 5000)
 @app.teardown_appcontext
 def teardown(self):
     """Closes the DB connection"""
+    from models import storage
     storage.close()
 
 
