@@ -17,3 +17,4 @@ from flask import Response, jsonify
 def return_status():
     """Returns the status of the API"""
     return jsonify({"status": "OK"})
+
