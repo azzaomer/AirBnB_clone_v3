@@ -19,6 +19,7 @@ classes = {"users": "User", "places": "Place", "states": "State",
            "cities": "City", "amenities": "Amenity",
            "reviews": "Review"}
 
+
 @app_views.route('/status')
 def return_status():
     """Returns the status of the API"""
