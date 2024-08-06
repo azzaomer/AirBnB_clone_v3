@@ -10,35 +10,39 @@ from datetime import datetime
 from models.engine.db_storage import classes
 
 
-@app_views.route("/amenities/",
-                 strict_slashes=False, methods=["GET"])
+@app_views.route("/amenities/", methods=['GET'],
+                 strict_slashes=False)
 def get_aminities():
     """Retrieves aall Aminity objects"""
-    all_aminities = [obj.to_dict() for obj in storage.all("Amenity").values()]
-    return jsonify(all_aminities)
+    all_amenities = []
+    amenities_obj = storage.all(Amenity).values()
+    for obj in amenities_obj:
+        all_amenities.append(obj.to_dict())
+    return jsonify(all_amenities)
 
 
-@app_views.route("/amenities/<amenity_id>", strict_slashes=False,
-                 methods=["GET"])
+@app_views.route("/amenities/<amenity_id>", methods=['GET'],
+                 strict_slashes=False)
 def get_amenity(amenity_id):
     """Retrieves a spcific amenity"""
-    all_ammenities = storage.all("Amenity").values()
-    amenity = [obj.to_dict() for obj in all_ammenities if obj.id == amenity_id]
-    if amenity == []:
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity:
+        return jsonify(amenity.to_dict())
+    else:
         abort(404)
-    return jsonify(amenity[0])
 
 
-@app_views.route("/amenities/<amenity_id>", strict_slashes=False,
-                 methods=["DELETE"])
+@app_views.route("/amenities/<amenity_id>", methods=['DELETE'],
+                 strict_slashes=False)
 def del_amenity(amenity_id):
     """Delete an amenity"""
-    all_amenities = storage.all("Amenity").values()
-    amenity = [obj.to_dict() for obj in all_amenities
-               if obj.id == amenity_id]
-    if amenity == []:
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity:
+        storage.delete(amenity)
+        storage.save()
+        return ({})
+    else:
         abort(404)
-    amenity.remove(amenity[0])
 
 
 @app_views.route('/amenities/',strict_slashes=False,
