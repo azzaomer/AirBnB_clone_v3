@@ -14,7 +14,7 @@ from models.amenity import Amenity
 
 @app_views.route("/cities/<city_id>/places", methods=['GET'],
                  strict_slashes=False)
-def GET_all_Place(city_id):
+def get_places(city_id):
     """ Returns JSON list of all `Place` instances associated
     with a given `City` instance in storage
 
@@ -34,7 +34,7 @@ def GET_all_Place(city_id):
 
 @app_views.route("/places/<place_id>", methods=['GET'],
                  strict_slashes=False)
-def GET_Place(place_id):
+def get_place(place_id):
     """ Returns `Place` instance in storage by id in URI subpath
 
     Args:
@@ -54,7 +54,7 @@ def GET_Place(place_id):
 
 @app_views.route("/places/<place_id>", methods=['DELETE'],
                  strict_slashes=False)
-def DELETE_Place(place_id):
+def del_place(place_id):
     """ Deletes `Place` instance in storage by id in URI subpath
 
     Args:
@@ -76,7 +76,7 @@ def DELETE_Place(place_id):
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
                  strict_slashes=False)
-def POST_Place(city_id):
+def post_place(city_id):
     """ Creates new `Place` instance in storage
 
     Return:
@@ -108,7 +108,7 @@ def POST_Place(city_id):
 
 @app_views.route("/places/<place_id>", methods=['PUT'],
                  strict_slashes=False)
-def PUT_Place(place_id):
+def put_place(place_id):
     """ Updates `Place` instance in storage by id in URI subpath, with
     kwargs from HTTP body request JSON dict
 
@@ -137,7 +137,7 @@ def PUT_Place(place_id):
 
 @app_views.route("/places_search", methods=['POST'],
                  strict_slashes=False)
-def places_search():
+def search_places():
     """ Retrieves a JSON list of `Place` instances corresponding to lists of
     ids included in the body of the request.
 

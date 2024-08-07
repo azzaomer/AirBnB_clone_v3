@@ -10,7 +10,7 @@ from models.user import User
 
 @app_views.route("/users", methods=['GET'],
                  strict_slashes=False)
-def GET_all_User():
+def get_users():
     """ Returns JSON list of all `User` instances in storage
 
     Return:
@@ -25,7 +25,7 @@ def GET_all_User():
 
 @app_views.route("/users/<user_id>", methods=['GET'],
                  strict_slashes=False)
-def GET_User(user_id):
+def get_user(user_id):
     """ Returns `User` instance in storage by id in URI subpath
 
     Args:
@@ -45,7 +45,7 @@ def GET_User(user_id):
 
 @app_views.route("/users/<user_id>", methods=['DELETE'],
                  strict_slashes=False)
-def DELETE_User(user_id):
+def delete_user(user_id):
     """ Deletes `User` instance in storage by id in URI subpath
 
     Args:
@@ -66,7 +66,7 @@ def DELETE_User(user_id):
 
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
-def POST_User():
+def post_user():
     """ Creates new `User` instance in storage
 
     Return:
@@ -88,7 +88,7 @@ def POST_User():
 
 @app_views.route("/users/<user_id>", methods=['PUT'],
                  strict_slashes=False)
-def PUT_User(user_id):
+def put_user(user_id):
     """ Updates `User` instance in storage by id in URI subpath, with
     kwargs from HTTP body request JSON dict
 
