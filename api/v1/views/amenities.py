@@ -64,7 +64,7 @@ def create_amenity():
         return abort(400, 'Missing name')
     amenity = Amenity(**amenity_data)
     amenities = []
-    
+
     new_amenity = Amenity(name=request.json['name'])
     storage.new(new_amenity)
     storage.save()
