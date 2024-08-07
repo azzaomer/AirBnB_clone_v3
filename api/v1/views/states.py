@@ -52,7 +52,7 @@ def delete_state(state_id):
 
 
 @app_views.route("/states/", strict_slashes=False, methods=["POST"])
-def post_state():
+def state_post():
     """Create a new state.
     Returns:  A JSON response containing the details of a new state.
     Raises:
