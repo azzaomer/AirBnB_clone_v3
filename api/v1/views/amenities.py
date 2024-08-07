@@ -45,7 +45,16 @@ def del_amenity(amenity_id):
                  strict_slashes=False)
 def create_amenity():
     '''Creates an Amenity'''
-    if request.content_type != 'application/json':
+    req_dict = request.get_json()
+    if not req_dict:
+        return (jsonify({'error': 'Not a JSON'}), 400)
+    elif 'name' not in req_dict:
+        return (jsonify({'error': 'Missing name'}), 400)
+    new_Amenity = Amenity(**req_dict)
+    new_Amenity.save()
+
+    return (jsonify(new_Amenity.to_dict()), 201)
+    """if request.content_type != 'application/json':
         return abort(400, 'Not a JSON')
     if not request.get_json():
         return abort(400, 'Not a JSON')
@@ -61,7 +70,7 @@ def create_amenity():
     storage.save()
     amenities.append(new_amenity.to_dict())
     return jsonify(amenities[0]), 201
-
+    """
 
 
 @app_views.route('/amenities/<amenity_id>', strict_slashes=False,
