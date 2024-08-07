@@ -54,9 +54,14 @@ def create_amenity():
     if 'name' not in amenity_data:
         return abort(400, 'Missing name')
     amenity = Amenity(**amenity_data)
+    amenities = []
+    
+    new_amenity = Amenity(name=request.json['name'])
+    storage.new(new_amenity)
+    storage.save()
+    amenities.append(new_amenity.to_dict())
+    return jsonify(amenities[0]), 201
 
-    amenity.save()
-    return jsonify(amenity_data.to_dict()), 201
 
 
 @app_views.route('/amenities/<amenity_id>', strict_slashes=False,
