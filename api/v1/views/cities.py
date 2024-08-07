@@ -45,10 +45,11 @@ def get_city(city_id):
     Raises:
         404: If the city with the specified ID does not exist.
     """
-    city = storage.get(classes["City"], city_id)
-    if city in None:
+    city = storage.get(City, city_id)
+    if city:
+        return jsonify(city.to_dict())
+    else:
         abort(404)
-    return jsonify(city.to_dict())
 
 
 @app_views.route("cities/<city_id>", strict_slashes=False, methods=["DELETE"])
