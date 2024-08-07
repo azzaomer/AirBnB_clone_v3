@@ -71,6 +71,7 @@ class FileStorage:
             key = f"{cls.__name__}.{id}"
             return self.__objects.get(key, None)
         return None
+        
         """
         if cls and id:
             if cls in classes.values():
@@ -89,6 +90,8 @@ class FileStorage:
         matching the given class. If no class is passed,
         returns the count of all objects in storage."""
 
+        return len(self.all(cls))
+        """
         if not cls:
             all_cls_inst = self.all()
             return len(all_cls_inst)
@@ -97,6 +100,7 @@ class FileStorage:
             return len(class_inst)
         if cls not in classes.values():
             return
+        """
 
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
