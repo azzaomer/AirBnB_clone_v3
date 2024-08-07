@@ -68,6 +68,11 @@ class FileStorage:
         """Returns the object based on the class and its ID,
         or None if not found"""
         if cls and id:
+            key = f"{cls.__name__}.{id}"
+            return self.__objects.get(key, None)
+        return None
+        """
+        if cls and id:
             if cls in classes.values():
                 all_obj = self.all(cls)
 
@@ -76,6 +81,8 @@ class FileStorage:
                         return value
             return
         return
+        """
+        
 
     def count(self, cls=None):
         """Returns the number of objects in storage
