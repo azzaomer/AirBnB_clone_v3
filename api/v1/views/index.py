@@ -20,13 +20,13 @@ classes = {"users": "User", "places": "Place", "states": "State",
            "reviews": "Review"}
 
 
-@app_views.route('/status')
+@app_views.route('/status', strict_slashes=False, methods=['GET'])
 def return_status():
     """Returns the status of the API"""
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/status', strict_slashes=False)
+@app_views.route('/status', strict_slashes=False, methods=['GET'])
 def count_obj():
     """
     Retrieves the number of each objects by type
